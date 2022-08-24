@@ -16,13 +16,22 @@
     padding: 1rem;
   ">
     <?php
+    // 初期値設定
+      $year = '';
+      $month = '';
+      $day = '23';
+
+      $year = $year ? $year : date("Y");
+      $month = $month ? $month : date("m");
+      $day = $day ? $day : date("d");
+
       $api = 'https://koyomi.zingsystem.com/api/';
       $param = array(
         'mode' => "d"
       ,'cnt'  => "1"
-      ,'targetyyyy' => date("Y")
-      ,'targetmm' => date("m")
-      ,'targetdd' => date("d")
+      ,'targetyyyy' => $year
+      ,'targetmm' => $month
+      ,'targetdd' => $day
       );
 
       $ch = curl_init($api);
@@ -34,25 +43,30 @@
       curl_close($ch);
 
       $data = json_decode($result, true);
-      $date = $data['datelist'][date("Y-m-d")];
+      $date = $data['datelist'][date($year."-".$month."-".$day)];
+      // $date = $data['datelist'][date("Y-m-d")];
 
       # 今日の曜日
       $yostr='日月火水木金土';
       $yo = mb_substr($yostr,date("w"),1);
 
       # 挨拶文を自動出力
+      
+      $mydate = mktime(0,0,0,$month,$day,$year);// 表示用年月日に整形
+      $sekki = $date['sekki'] ? "◆".$date['sekki'] : "";//二十四節気を設定
+
       $message = '🐯 おはようございます！ 🐯'
                   ."<br> --- "
-                  .date("Y")
+                  .$year
                   .'('.$date['gengo'].$date['wareki']
                   .')年'
-                  .date("n").'月'
-                  .date("j").'日('.$yo.')'
+                  .date("n",$mydate).'月'
+                  .date("j",$mydate).'日('.$yo.')'
                   .$date['rokuyou']
-                  .'◆'
-                  .$date['sekki']
+                  .$sekki
                   .' ---';
       echo $message;
+      
   ?>
   </section>
   <p  style="
@@ -60,7 +74,7 @@
     color: red;
     text-align:right;
     margin:0 auto;
-    padding: 1rem;
-  ">※注意：開発モード仮運用中</p>
+    padding: 1.6rem;
+  ">💓現在試験運用中です</p>
  </body>
 </html>
