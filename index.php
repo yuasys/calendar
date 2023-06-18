@@ -19,7 +19,7 @@
     // 初期値設定
       $year = '';
       $month = '';
-      $day = '23';
+      $day = '';
 
       $year = $year ? $year : date("Y");
       $month = $month ? $month : date("m");
@@ -75,6 +75,6 @@
     text-align:right;
     margin:0 auto;
     padding: 1.6rem;
-  ">💓 現在試験運用中です</p>
+  ">現在試験運用中</p>
  </body>
 </html>
